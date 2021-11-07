@@ -12,8 +12,8 @@
     <name>jraft-example ${project.version}</name>
 
     <properties>
-        <jackson.databind.version>2.10.5.1</jackson.databind.version>
-        <jackson.dataformat.version>2.10.4</jackson.dataformat.version>
+        <jackson.databind.version>2.11.0</jackson.databind.version>
+        <jackson.dataformat.version>2.11.0</jackson.dataformat.version>
     </properties>
 
     <dependencies>
