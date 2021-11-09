@@ -53,8 +53,8 @@ public class ElectionBootstrap {
                 PeerId serverId = node.getNode().getLeaderId();
                 String ip = serverId.getIp();
                 int port = serverId.getPort();
-                System.out.println("[ElectionBootstrap] Leader's ip is: " + ip + ", port: " + port);
-                System.out.println("[ElectionBootstrap] Leader start on term: " + leaderTerm);
+                System.out.println("===============>[ElectionBootstrap] Leader's ip is: " + ip + ", port: " + port);
+                System.out.println("===============>[ElectionBootstrap] Leader start on term: " + leaderTerm);
             }
 
             @Override

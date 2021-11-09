@@ -92,5 +92,12 @@ public class PutExample {
                     readUtf8(entry.getValue()));
             }
         }
+
+        for (int i = 0; i < 100000000; i++) {
+            rheaKVStore.bPut(String.valueOf(i).getBytes(), String.valueOf(i).getBytes());
+            if (i % 10000 == 0) {
+                System.out.println("Write Value:" + String.valueOf(i));
+            }
+        }
     }
 }
