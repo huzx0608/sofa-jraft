@@ -14,11 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.jraft.example.rheakv;
-
-import java.io.File;
-import java.io.InputStream;
-import java.util.List;
+package com.alipay.sofa.jraft.rhea.main;
 
 import com.alipay.sofa.jraft.rhea.client.DefaultRheaKVStore;
 import com.alipay.sofa.jraft.rhea.client.RheaKVStore;
@@ -28,43 +24,30 @@ import com.alipay.sofa.jraft.rhea.options.RheaKVStoreOptions;
 import com.alipay.sofa.jraft.rhea.options.configured.MultiRegionRouteTableOptionsConfigured;
 import com.alipay.sofa.jraft.rhea.options.configured.PlacementDriverOptionsConfigured;
 import com.alipay.sofa.jraft.rhea.options.configured.RheaKVStoreOptionsConfigured;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-/**
- *
- * @author jiachun.fjc
- */
+import java.util.List;
+
 public class Client {
-
     private final RheaKVStore rheaKVStore = new DefaultRheaKVStore();
 
-    public void init() {
+    public void init(String clusterName, String initServerList) {
         final List<RegionRouteTableOptions> regionRouteTableOptionsList = MultiRegionRouteTableOptionsConfigured
-            .newConfigured() //
-            .withInitialServerList(-1L /* default id */, Configs.ALL_NODE_ADDRESSES) //
-            .config();
-        final PlacementDriverOptions pdOpts = PlacementDriverOptionsConfigured.newConfigured() //
-            .withFake(true) //
+            .newConfigured().withInitialServerList(-1L, initServerList).config();
+
+        final PlacementDriverOptions pdOpts = PlacementDriverOptionsConfigured.newConfigured()
+            //
+            .withFake(false)
+            //
+            .withInitialPdServerList("127.0.0.1:8180,127.0.0.1:8181,127.0.0.1:8182").withPdGroupId("pd_test--1")
             .withRegionRouteTableOptionsList(regionRouteTableOptionsList) //
             .config();
+
         final RheaKVStoreOptions opts = RheaKVStoreOptionsConfigured.newConfigured() //
-            .withClusterName(Configs.CLUSTER_NAME) //
+            .withClusterName(clusterName) //
             .withPlacementDriverOptions(pdOpts) //
             .config();
         System.out.println(opts);
         rheaKVStore.init(opts);
-    }
-
-    public void init(String confPath) {
-        final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        try {
-            final RheaKVStoreOptions opts = mapper.readValue(new File(confPath), RheaKVStoreOptions.class);
-            System.out.println("===> Opts:" + opts.toString());
-            rheaKVStore.init(opts);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     public void shutdown() {

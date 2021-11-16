@@ -6,8 +6,8 @@
             <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n"/>
         </Console>
 
-        <RollingFile name="RollingFile" filename="log/rheakv-test.log"
-                     filepattern="log/%d{YYYYMMddHHmmss}-jraft-test.log">
+        <RollingFile name="RollingFile" filename="log/jraft-pd.log"
+                     filepattern="log/%d{YYYYMMddHHmmss}-jraft-pd.log">
             <PatternLayout pattern="%d{YYYY-MM-dd HH:mm:ss} [%t] %-5p %c{1}:%L - %msg%n"/>
             <Policies>
                 <SizeBasedTriggeringPolicy size="100 MB"/>

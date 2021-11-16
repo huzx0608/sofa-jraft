@@ -16,10 +16,12 @@
  */
 package com.alipay.sofa.jraft.rhea.pd;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
 import com.alipay.sofa.jraft.rhea.client.RheaKVStore;
@@ -43,7 +45,7 @@ public class RheaHeartbeatTest extends RheaKVTestCluster {
             for (;;) {
                 heartbeatTest.putAndGetValue();
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     break;
                 }
@@ -63,9 +65,25 @@ public class RheaHeartbeatTest extends RheaKVTestCluster {
     private void putAndGetValue() {
         final RheaKVStore store = getLeaderStore(ThreadLocalRandom.current().nextInt(1, 2));
         final String key = UUID.randomUUID().toString();
-        final byte[] value = makeValue(UUID.randomUUID().toString());
-        store.bPut(key, value);
-        final byte[] newValue = store.bGet(key);
-        Assert.assertArrayEquals(value, newValue);
+
+        String finalStrResult = "";
+        String element = UUID.randomUUID().toString();
+
+        for (int i = 0; i < 100; i++) {
+            finalStrResult += element;
+        }
+
+        boolean isSuccess = false;
+        do {
+            try {
+                final byte[] value = makeValue(finalStrResult);
+                isSuccess = store.bPut(key, value);
+                System.out.println("===> Key:" + key);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } while (!isSuccess);
+        // final byte[] newValue = store.bGet(key);
+        // Assert.assertArrayEquals(value, newValue);
     }
 }

@@ -504,6 +504,7 @@ public class StoreEngine implements Lifecycle<StoreEngineOptions>, Describer {
             this.splitting.set(false);
             return;
         }
+        LOG.info("Start Region Split====> Origin Region Id[" + regionId + "], newRegionId[" + newRegionId + "]");
         final KVOperation op = KVOperation.createRangeSplit(splitKey, regionId, newRegionId);
         final Task task = new Task();
         task.setData(ByteBuffer.wrap(Serializers.getDefault().writeObject(op)));
